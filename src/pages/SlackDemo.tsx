@@ -370,7 +370,7 @@ const SlackDemo = () => {
 
         {/* Slack Tab */}
         <TabsContent value="slack" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1  gap-6">
             {/* Enhanced Slack Chat with Threads */}
             <Card className="bg-github-darkSecondary border-github-border">
               <CardHeader>
