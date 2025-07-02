@@ -114,42 +114,44 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6 bg-github-dark min-h-screen">
+    <div className="p-8 space-y-8 bg-github-dark min-h-screen max-w-7xl mx-auto">
       {/* Welcome Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-white">
+      <div className="flex justify-between items-center mb-12">
+        <div className="space-y-2">
+          <h1 className="text-4xl font-bold text-white">
             안녕하세요, 임현우님! 👋
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-gray-400 text-lg">
             오늘도 효율적인 협업을 시작해보세요
           </p>
         </div>
-        <div className="text-right">
-          <div className="text-sm text-gray-400">현재 시간</div>
-          <div className="text-lg font-mono text-white">
+        <div className="text-right bg-github-darkSecondary p-4 rounded-xl border border-github-border">
+          <div className="text-sm text-gray-400 mb-1">현재 시간</div>
+          <div className="text-xl font-mono text-white">
             {currentTime.toLocaleTimeString('ko-KR')}
           </div>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
-            <Card key={index} className="bg-github-darkSecondary border-github-border hover:border-toss-blue transition-colors card-hover">
-              <CardContent className="p-6">
+            <Card key={index} className="bg-github-darkSecondary border-github-border hover:border-toss-blue transition-all duration-300 hover:shadow-xl">
+              <CardContent className="p-8">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="space-y-2">
                     <p className="text-sm font-medium text-gray-400">{stat.title}</p>
-                    <p className="text-2xl font-bold text-white">{stat.value}</p>
-                    <p className="text-xs text-green-500 flex items-center mt-1">
-                      <ArrowUp className="w-3 h-3 mr-1" />
+                    <p className="text-3xl font-bold text-white">{stat.value}</p>
+                    <p className="text-sm text-green-500 flex items-center">
+                      <ArrowUp className="w-4 h-4 mr-1" />
                       {stat.change}
                     </p>
                   </div>
-                  <Icon className={`w-8 h-8 ${stat.color}`} />
+                  <div className="p-3 bg-github-dark rounded-lg">
+                    <Icon className={`w-8 h-8 ${stat.color}`} />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -157,41 +159,41 @@ const Dashboard = () => {
         })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Project Progress */}
         <Card className="lg:col-span-2 bg-github-darkSecondary border-github-border">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Activity className="w-5 h-5 mr-2 text-toss-blue" />
+          <CardHeader className="pb-6">
+            <CardTitle className="text-xl text-white flex items-center">
+              <Activity className="w-6 h-6 mr-3 text-toss-blue" />
               프로젝트 현황
             </CardTitle>
-            <CardDescription className="text-gray-400">
+            <CardDescription className="text-gray-400 text-base">
               현재 진행 중인 프로젝트의 상태를 확인해보세요
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
+          <CardContent className="space-y-8">
+            <div className="space-y-6">
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-gray-300">웹 서비스 개발</span>
-                <span className="text-sm text-gray-400">{projectProgress}%</span>
+                <span className="text-base font-medium text-gray-300">웹 서비스 개발</span>
+                <span className="text-base text-gray-400 font-semibold">{projectProgress}%</span>
               </div>
-              <Progress value={projectProgress} className="h-2" />
+              <Progress value={projectProgress} className="h-3" />
               
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                <div className="text-center p-3 bg-github-dark rounded-lg">
-                  <CheckCircle className="w-5 h-5 text-green-500 mx-auto mb-1" />
-                  <div className="text-lg font-bold text-white">24</div>
-                  <div className="text-xs text-gray-400">완료된 작업</div>
+              <div className="grid grid-cols-3 gap-6 mt-8">
+                <div className="text-center p-6 bg-github-dark rounded-xl border border-github-border">
+                  <CheckCircle className="w-6 h-6 text-green-500 mx-auto mb-3" />
+                  <div className="text-2xl font-bold text-white mb-1">24</div>
+                  <div className="text-sm text-gray-400">완료된 작업</div>
                 </div>
-                <div className="text-center p-3 bg-github-dark rounded-lg">
-                  <AlertCircle className="w-5 h-5 text-orange-500 mx-auto mb-1" />
-                  <div className="text-lg font-bold text-white">8</div>
-                  <div className="text-xs text-gray-400">진행 중</div>
+                <div className="text-center p-6 bg-github-dark rounded-xl border border-github-border">
+                  <AlertCircle className="w-6 h-6 text-orange-500 mx-auto mb-3" />
+                  <div className="text-2xl font-bold text-white mb-1">8</div>
+                  <div className="text-sm text-gray-400">진행 중</div>
                 </div>
-                <div className="text-center p-3 bg-github-dark rounded-lg">
-                  <TrendingUp className="w-5 h-5 text-blue-500 mx-auto mb-1" />
-                  <div className="text-lg font-bold text-white">92%</div>
-                  <div className="text-xs text-gray-400">팀 효율성</div>
+                <div className="text-center p-6 bg-github-dark rounded-xl border border-github-border">
+                  <TrendingUp className="w-6 h-6 text-blue-500 mx-auto mb-3" />
+                  <div className="text-2xl font-bold text-white mb-1">92%</div>
+                  <div className="text-sm text-gray-400">팀 효율성</div>
                 </div>
               </div>
             </div>
@@ -200,25 +202,25 @@ const Dashboard = () => {
 
         {/* Real-time Notifications */}
         <Card className="bg-github-darkSecondary border-github-border">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Zap className="w-5 h-5 mr-2 text-yellow-500" />
+          <CardHeader className="pb-6">
+            <CardTitle className="text-xl text-white flex items-center">
+              <Zap className="w-6 h-6 mr-3 text-yellow-500" />
               실시간 알림
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-4">
             {notifications.map((notification) => (
-              <div key={notification.id} className="p-3 bg-github-dark rounded-lg border border-github-border">
-                <div className="flex items-start space-x-2">
-                  <div className={`w-2 h-2 rounded-full mt-2 ${
+              <div key={notification.id} className="p-5 bg-github-dark rounded-xl border border-github-border hover:border-toss-blue/50 transition-colors">
+                <div className="flex items-start space-x-3">
+                  <div className={`w-3 h-3 rounded-full mt-2 flex-shrink-0 ${
                     notification.type === 'success' ? 'bg-green-500' :
                     notification.type === 'warning' ? 'bg-orange-500' : 'bg-blue-500'
                   }`} />
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-300">{notification.message}</p>
-                    <div className="flex justify-between items-center mt-2">
+                  <div className="flex-1 space-y-3">
+                    <p className="text-sm text-gray-300 leading-relaxed">{notification.message}</p>
+                    <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">{notification.time}</span>
-                      <Button size="sm" variant="outline" className="h-6 text-xs border-toss-blue text-toss-blue hover:bg-toss-blue hover:text-white">
+                      <Button size="sm" variant="outline" className="h-7 text-xs border-toss-blue text-toss-blue hover:bg-toss-blue hover:text-white">
                         {notification.action}
                       </Button>
                     </div>
@@ -232,10 +234,10 @@ const Dashboard = () => {
 
       {/* Recent Documents */}
       <Card className="bg-github-darkSecondary border-github-border">
-        <CardHeader>
-          <CardTitle className="text-white flex items-center justify-between">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-xl text-white flex items-center justify-between">
             <div className="flex items-center">
-              <FileText className="w-5 h-5 mr-2 text-toss-blue" />
+              <FileText className="w-6 h-6 mr-3 text-toss-blue" />
               최근 자동 생성된 문서
             </div>
             <Button variant="outline" size="sm" className="border-toss-blue text-toss-blue hover:bg-toss-blue hover:text-white">
@@ -244,13 +246,13 @@ const Dashboard = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {recentDocs.map((doc) => (
-              <div key={doc.id} className="p-4 bg-github-dark rounded-lg border border-github-border hover:border-toss-blue transition-colors cursor-pointer">
+              <div key={doc.id} className="p-6 bg-github-dark rounded-xl border border-github-border hover:border-toss-blue transition-all duration-300 cursor-pointer hover:shadow-lg">
                 <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2">
-                      <h3 className="font-medium text-white">{doc.title}</h3>
+                  <div className="flex-1 space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <h3 className="font-medium text-white text-lg">{doc.title}</h3>
                       <Badge 
                         variant={doc.status === 'AI Generated' ? 'default' : 'secondary'}
                         className={doc.status === 'AI Generated' ? 'bg-toss-blue' : ''}
@@ -258,19 +260,21 @@ const Dashboard = () => {
                         {doc.status}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-400 mt-1">
+                    <p className="text-sm text-gray-400">
                       {doc.source} • {doc.date}
                     </p>
-                    <div className="flex items-center space-x-2 mt-2">
-                      <span className="text-xs text-gray-500">참여자:</span>
-                      {doc.participants.map((participant, idx) => (
-                        <span key={idx} className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded">
-                          {participant}
-                        </span>
-                      ))}
+                    <div className="flex items-center space-x-3">
+                      <span className="text-sm text-gray-500">참여자:</span>
+                      <div className="flex space-x-2">
+                        {doc.participants.map((participant, idx) => (
+                          <span key={idx} className="text-sm bg-gray-700 text-gray-300 px-3 py-1 rounded-lg">
+                            {participant}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-3 ml-6">
                     <Button size="sm" variant="ghost" className="text-gray-400 hover:text-white">
                       편집
                     </Button>
