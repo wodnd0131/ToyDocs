@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,22 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// 커스텀 프로젝트 색상
+				github: {
+					dark: '#0d1117',
+					darkSecondary: '#161b22',
+					border: '#30363d',
+					blue: '#1f6feb',
+					green: '#238636',
+					orange: '#db6d28',
+					red: '#da3633'
+				},
+				toss: {
+					blue: '#3182f6',
+					darkBlue: '#1e40af',
+					lightBlue: '#dbeafe',
+					gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
 				}
 			},
 			borderRadius: {
@@ -84,11 +101,49 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(10px)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					}
+				},
+				'slide-in-left': {
+					'0%': {
+						transform: 'translateX(-100%)'
+					},
+					'100%': {
+						transform: 'translateX(0)'
+					}
+				},
+				'type-writer': {
+					'0%': { width: '0%' },
+					'100%': { width: '100%' }
+				},
+				'pulse-blue': {
+					'0%, 100%': {
+						boxShadow: '0 0 0 0 rgba(49, 130, 246, 0.7)'
+					},
+					'50%': {
+						boxShadow: '0 0 0 10px rgba(49, 130, 246, 0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.6s ease-out',
+				'slide-in-left': 'slide-in-left 0.5s ease-out',
+				'type-writer': 'type-writer 2s steps(20) infinite',
+				'pulse-blue': 'pulse-blue 2s infinite'
+			},
+			backgroundImage: {
+				'gradient-toss': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+				'gradient-github': 'linear-gradient(135deg, #1f6feb 0%, #238636 100%)'
 			}
 		}
 	},
