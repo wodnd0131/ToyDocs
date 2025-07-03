@@ -86,6 +86,7 @@ const SlackDemo = () => {
   const [issueCreationStep, setIssueCreationStep] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState<GeneratedIssue | null>(null);
+  const [isDragOverTextarea, setIsDragOverTextarea] = useState(false);
 
   const summaryCardRef = useRef<HTMLDivElement>(null);
 
@@ -418,34 +419,76 @@ const SlackDemo = () => {
     }, 3500); // 애니메이션 시간과 일치
   };
 
-  const handleFileSelect = async (files: File[]) => {
+  const handleFileSelectForMeeting = async (files: File[]) => {
     if (files.length === 0) return;
-    
+
     setIsProcessing(true);
     const file = files[0];
-    
+
+    // Simulate file reading and content extraction
+    const dummyContent = `## ${file.name} 파일에서 추출된 회의록\n\n- 파일 크기: ${file.size} bytes\n- 파일 타입: ${file.type}\n\n이 파일은 회의록 내용을 담고 있습니다. 주요 논의 사항은 다음과 같습니다:\n\n1.  **프로젝트 A 진행 상황**: 현재 80% 완료되었으며, 다음 주까지 마무리 예정입니다.\n2.  **새로운 기능 B 개발**: 초기 설계 단계에 있으며, 다음 스프린트부터 본격적으로 착수할 예정입니다.\n3.  **팀 빌딩 활동**: 다음 달 첫째 주 금요일에 진행하기로 결정되었습니다.\n\n---`;
+    setMeetingContent(dummyContent);
+
+    toast({
+      title: "파일 처리 완료!",
+      description: `${file.name} 파일에서 회의록 내용이 추출되었습니다.`,
+    });
+    setIsProcessing(false);
+  };
+
+  const handleFileDropToTextarea = async (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverTextarea(false);
+
+    if (isCreatingIssues) return;
+
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length === 0) return;
+
+    const file = files[0];
+    // For demo, we only process the first file
+
+    setIsCreatingIssues(true);
+    setIssueCreationStep(0);
+
     try {
-      const result = await MeetingService.processVoiceFile(file);
-      
-      if (result.success && result.data) {
-        const newIssues = result.data.issues || [];
-        setGeneratedIssues((prev) => [...newIssues, ...prev]);
-        
-        toast({
-          title: "음성 파일 처리 완료!",
-          description: `${newIssues.length}개의 이슈가 자동으로 생성되었습니다.`,
-        });
+      for (let i = 0; i < issueCreationSteps.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 600));
+        setIssueCreationStep(i + 1);
       }
+
+      const dummyContent = `## ${file.name} 파일에서 추출된 회의록\n\n- 파일 크기: ${file.size} bytes\n- 파일 타입: ${file.type}\n\n이 파일은 드래그 앤 드롭으로 추출된 회의록 내용입니다. 주요 논의 사항은 다음과 같습니다:\n\n1.  **드래그 앤 드롭 기능 구현**: 성공적으로 구현되었습니다.\n2.  **단계별 로딩 적용**: 파일 처리 과정이 시각적으로 표시됩니다.\n3.  **사용자 경험 개선**: 더욱 직관적인 인터페이스를 제공합니다.\n\n---`;
+      setMeetingContent(dummyContent);
+
+      toast({
+        title: "파일에서 회의록 추출 완료!",
+        description: `${file.name} 파일에서 회의록 내용이 성공적으로 추출되었습니다.`,
+      });
     } catch (error) {
-      console.error("Failed to process voice file:", error);
+      console.error("Failed to process file from textarea drop:", error);
       toast({
         title: "파일 처리 실패",
         description: "파일을 처리하는 중 오류가 발생했습니다.",
         variant: "destructive"
       });
     } finally {
-      setIsProcessing(false);
+      setIsCreatingIssues(false);
     }
+  };
+
+  const handleDragOverTextarea = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isCreatingIssues) {
+      setIsDragOverTextarea(true);
+    }
+  };
+
+  const handleDragLeaveTextarea = (e: React.DragEvent<HTMLTextAreaElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOverTextarea(false);
   };
 
   const handleMeetingTextProcess = async () => {
@@ -555,20 +598,13 @@ const SlackDemo = () => {
 
       {/* Tabs */}
       <Tabs defaultValue="slack" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-github-darkSecondary border-github-border">
+        <TabsList className="grid w-full grid-cols-2 bg-github-darkSecondary border-github-border">
           <TabsTrigger
             value="slack"
             className="text-white data-[state=active]:bg-toss-blue"
           >
             <MessageSquare className="w-4 h-4 mr-2" />
             Slack 채널
-          </TabsTrigger>
-          <TabsTrigger
-            value="voice"
-            className="text-white data-[state=active]:bg-toss-blue"
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            음성 파일
           </TabsTrigger>
           <TabsTrigger
             value="meeting"
@@ -777,60 +813,46 @@ const SlackDemo = () => {
           </div>
         </TabsContent>
 
-        {/* Voice File Tab */}
-        <TabsContent value="voice" className="space-y-6">
-          <FileUpload
-            accept=".mp3,.wav,.m4a,.mp4,.ogg,.webm"
-            maxSize={100}
-            title="음성 파일 업로드"
-            description="회의 녹음 파일을 업로드하면 자동으로 텍스트로 변환하고 이슈를 생성합니다"
-            onFileSelect={handleFileSelect}
-            disabled={isProcessing}
-            className="max-w-3xl mx-auto"
-          />
-        </TabsContent>
-
         {/* Meeting Tab */}
         <TabsContent value="meeting" className="space-y-6">
-          <Card className="bg-github-darkSecondary border-github-border relative">
-            {isCreatingIssues && (
-              <div className="absolute inset-0 bg-github-dark/60 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
-                <div className="w-16 h-16 border-4 border-toss-blue border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-white mt-4 font-semibold animate-pulse">
-                  {issueCreationSteps[issueCreationStep - 1]}
-                </p>
-                <div className="w-64 bg-github-border rounded-full h-2 mt-2">
-                  <div 
-                    className="bg-toss-blue h-2 rounded-full transition-all duration-500"
-                    style={{width: `${(issueCreationStep / issueCreationSteps.length) * 100}%`}}
-                  ></div>
+          {generatedIssues.length === 0 && (
+            <Card className="bg-github-darkSecondary border-github-border relative">
+              {isCreatingIssues && (
+                <div className="absolute inset-0 bg-github-dark/60 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
+                  <div className="w-16 h-16 border-4 border-toss-blue border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-white mt-4 font-semibold animate-pulse">
+                    {issueCreationSteps[issueCreationStep - 1]}
+                  </p>
+                  <div className="w-64 bg-github-border rounded-full h-2 mt-2">
+                    <div 
+                      className="bg-toss-blue h-2 rounded-full transition-all duration-500"
+                      style={{width: `${(issueCreationStep / issueCreationSteps.length) * 100}%`}}
+                    ></div>
+                  </div>
                 </div>
-              </div>
-            )}
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Edit3 className="w-5 h-5 mr-2 text-toss-blue" />
-                회의록 작성
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              )}
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Edit3 className="w-5 h-5 mr-2 text-toss-blue" />
+                  회의록 작성
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div className="space-y-4">
                   <Textarea
-                    placeholder="회의록을 작성해주세요...
-
-예시:
-- 프로젝트 진행 상황 논의
-- 로그인 버그 수정 필요 (담당: 김개발)
-- UI 개선 작업 계획 수립
-- 데이터베이스 성능 최적화 검토
-
-작성하신 내용을 바탕으로 자동으로 이슈를 생성해드립니다."
+                    placeholder="회의록을 작성해주세요...\n\n예시:\n- 프로젝트 진행 상황 논의\n- 로그인 버그 수정 필요 (담당: 김개발)\n- UI 개선 작업 계획 수립\n- 데이터베이스 성능 최적화 검토\n\n작성하신 내용을 바탕으로 자동으로 이슈를 생성해드립니다."
                     value={meetingContent}
                     onChange={(e) => setMeetingContent(e.target.value)}
-                    className="min-h-[400px] bg-github-dark border-github-border text-white placeholder-gray-400 resize-none"
+                    className={cn(
+                      "min-h-[400px] bg-github-dark border-github-border text-white placeholder-gray-400 resize-none",
+                      isDragOverTextarea && "border-toss-blue ring-2 ring-toss-blue"
+                    )}
                     disabled={isCreatingIssues}
+                    onDragOver={handleDragOverTextarea}
+                    onDragLeave={handleDragLeaveTextarea}
+                    onDrop={handleFileDropToTextarea}
                   />
+
                   <div className="flex justify-between items-center">
                     <div className="text-sm text-gray-400">
                       {meetingContent.length} 글자
@@ -854,33 +876,32 @@ const SlackDemo = () => {
                     </Button>
                   </div>
                 </div>
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-white">미리보기</h3>
-                  <div className="min-h-[400px] p-4 bg-github-dark border border-github-border rounded-md overflow-auto prose prose-invert prose-sm max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {meetingContent || "여기에 마크다운 미리보기가 표시됩니다."}
-                    </ReactMarkdown>
-                  </div>
-                  <div className="bg-github-dark p-4 rounded-lg">
-                    <h3 className="text-sm font-medium text-white mb-2">작성 팁</h3>
-                    <ul className="text-sm text-gray-400 space-y-1">
-                      <li>• 작업 항목은 명확하게 작성해주세요</li>
-                      <li>• 담당자가 있다면 괄호 안에 표시해주세요</li>
-                      <li>
-                        • 우선순위나 예상 소요시간을 언급하면 더 정확한 이슈가
-                        생성됩니다
-                      </li>
-                    </ul>
-                  </div>
+
+                <div className="bg-github-dark p-4 rounded-lg">
+                  <h3 className="text-sm font-medium text-white mb-2">작성 팁</h3>
+                  <ul className="text-sm text-gray-400 space-y-1">
+                    <li>• 작업 항목은 명확하게 작성해주세요</li>
+                    <li>• 담당자가 있다면 괄호 안에 표시해주세요</li>
+                    <li>
+                      • 우선순위나 예상 소요시간을 언급하면 더 정확한 이슈가
+                      생성됩니다
+                    </li>
+                  </ul>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
+          {generatedIssues.length > 0 && (
+            <div className="min-h-[400px] flex items-center justify-center text-gray-400 text-lg">
+              <CheckCircle className="w-8 h-8 mr-2 text-green-500" />
+              이슈가 성공적으로 생성되었습니다. 아래에서 확인해주세요.
+            </div>
+          )}
         </TabsContent>
       </Tabs>
 
       {/* AI Generated Summary Card */}
-      {isSummaryGenerated && aiSummary && (
+      {isSummaryGenerated && aiSummary && generatedIssues.length === 0 && (
         <div ref={summaryCardRef} className="space-y-6">
           <Card className="bg-github-darkSecondary border-github-border animate-fade-in">
             <CardHeader>
@@ -923,7 +944,7 @@ const SlackDemo = () => {
                     ) : isEditingSummary ? (
                       <><Save className="w-3 h-3 mr-1" /> 저장</>
                     ) : (
-                      <><Check className="w-3 h-3 mr-1" /> 확정 및 이슈 생성</>
+                      <><Check className="w-3 h-3 mr-1" /> 이슈 생성</>
                     )}
                   </Button>
                 </div>

@@ -16,6 +16,9 @@ dist-ssr
 .env.*
 package-lock.json
 .cluade
+
+GEMINI.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

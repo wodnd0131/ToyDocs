@@ -30,7 +30,6 @@ const Layout = ({ children }: LayoutProps) => {
     { name: '이슈', href: '/issues', icon: GitBranch },
     { name: '문서', href: '/docs', icon: FileText },
     { name: '슬랙 데모', href: '/slack-demo', icon: MessageSquare },
-    { name: '애널리틱스', href: '/analytics', icon: BarChart3 },
     { name: '설정', href: '/settings', icon: Settings },
   ];
 
