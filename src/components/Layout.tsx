@@ -29,7 +29,7 @@ const Layout = ({ children }: LayoutProps) => {
     { name: '대시보드', href: '/', icon: Home },
     { name: '이슈', href: '/issues', icon: GitBranch },
     { name: '문서', href: '/docs', icon: FileText },
-    { name: '슬랙 데모', href: '/slack-demo', icon: MessageSquare },
+    { name: '회의록 등록', href: '/slack-demo', icon: MessageSquare },
     { name: '설정', href: '/settings', icon: Settings },
   ];
 
