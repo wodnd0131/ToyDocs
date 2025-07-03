@@ -39,20 +39,18 @@ const Layout = ({ children }: LayoutProps) => {
     <div className="min-h-screen bg-github-dark dark">
       {/* Top Navigation */}
       <header className="bg-github-darkSecondary border-b border-github-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-toss rounded-lg flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-white">ToyDocs</span>
+            {/* Left Section: Logo */}
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-toss rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" />
               </div>
+              <span className="text-xl font-bold text-white">ToyDocs</span>
             </div>
 
-            {/* Search */}
-            <div className="flex-1 max-w-lg mx-8">
+            {/* Middle Section: Search */}
+            <div className="max-w-lg w-full mx-8"> {/* Removed flex-1 and adjusted width */}
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
@@ -62,7 +60,7 @@ const Layout = ({ children }: LayoutProps) => {
               </div>
             </div>
 
-            {/* Right Navigation */}
+            {/* Right Section: Notifications and Profile */}
             <div className="flex items-center space-x-4">
               <Button variant="ghost" size="sm" className="relative text-gray-300 hover:text-white">
                 <Bell className="w-5 h-5" />
