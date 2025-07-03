@@ -1,73 +1,114 @@
-# Welcome to your Lovable project
+# 도메인
+분산된 협업 환경의 모든 활동을 자동으로 수집하고 문서화하여 체계적인 프로젝트 관리를 제공하는 통합 서비스
 
-## Project info
+## **핵심 기능**
+회의록으로부터 이슈,리마인더 등록 자동화 & 슬랙 스레드(혹은 내장 메신저) 토론을 자동 문서화
 
-**URL**: https://lovable.dev/projects/5d19a0e6-8c35-4f5c-8130-cc5517549422
+- 1. 분산 협업 도구 통합 연동
+- 2. AI 기반 자동 문서화 엔진
+- 3. 스마트 이슈 및 리마인더 자동 할당
+- 4. 통합 작업 환경 제공
+- 5. 지능형 협업 분석 및 최적화
 
-## How can I edit this code?
+# 서비스 배포 페이지
 
-There are several ways of editing your application.
+기본 통합 환경 프로토타입
+https://wodnd0131.github.io/SimpleProject
 
-**Use Lovable**
+채팅 자동화 관련 프로토타입
+https://wodnd0131.github.io/ToyDocs
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/5d19a0e6-8c35-4f5c-8130-cc5517549422) and start prompting.
+# 프로젝트 매니징 서비스 유저 시나리오
 
-Changes made via Lovable will be committed automatically to this repo.
+## 사용자 페르소나 요약
 
-**Use your preferred IDE**
+### **문서화가 귀찮은 개발자 - 임현우 (20세)**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **상황**: 프로젝트 작업량도 많아 바쁜데, 문서화 양이 너무 많음
+- **목표**: 체계적인 문서화를 하되, 시간을 적게 투자하기
+- **니즈**: 분산된 협업 환경에서 문서화를 자동화하고 싶음
+- **페인 포인트**: 귀찮은 문서화, 부족한 시간
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### **팀 리더 PM - 유채영 (22세)**
 
-Follow these steps:
+- **상황**: 채팅으로 진행된 토론 및 토의 과정을 문서화해야함
+- **목표**: 토의의 주제와 각 팀원 별 의견 정리, 최종 결론을 문서화
+- **니즈**: 정식 회의가 아닌 토론 또한 문서화하고 싶음
+- **페인 포인트**: 채팅이라는 환경 내에서 문서화는 너무 번거로움
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 사용자 시나리오 및 스토리
 
-# Step 3: Install the necessary dependencies.
-npm i
+## **시나리오 1: 문서화가 귀찮은 개발자의 자동화된 협업**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+**상황**: 임현우가 프로젝트 진행 중 분산된 협업 환경(슬랙, 노션, 지라 등)에서 발생하는 모든 내용을 체계적으로 문서화해야 하지만, 시간 부족으로 인해 어려움을 겪고 있음
 
-**Edit a file directly in GitHub**
+**사용자 시나리오**:
+1. 자신의 이슈별 작업 시간이 커밋 시간을 기준으로 정제되어 기록
+2. 슬랙에서 진행된 기술 토론이 자동으로 분석되어 관련 문서로 정리됨
+3. 코드 리뷰 과정에서 나온 피드백이 자동으로 학습 문서로 변환
+4. 개발 중 막힌 부분을 토론했던 내용이 자동으로 트러블슈팅 문서로 저장
+5. 프로젝트 완료 후 모든 활동이 체계적인 포트폴리오 문서로 자동 생성
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+**사용자 스토리**:
+> "개발자로서, 저는 문서화에 시간을 많이 투자하지 않고도 분산된 협업 환경의 모든 내용이 자동으로 체계적인 문서로 정리되길 원합니다. 그래서 개발에 집중하면서도 완성도 높은 문서화가 가능합니다."
 
-**Use GitHub Codespaces**
+**인수 조건**:
+- Given: 개발자가 여러 협업 도구에서 활동했을 때
+- When: 작업 시간 기록과 함께 협업 내용이 발생했을 때
+- Then: 분산된 모든 활동이 자동으로 수집되어 체계적인 문서로 변환된다
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## **시나리오 2: PM의 채팅 기반 토론 문서화 자동화**
 
-This project is built with:
+**상황**: 유채영이 팀과 슬랙에서 진행한 비공식적인 토론과 토의 과정을 정식 문서로 만들어야 하지만, 채팅 환경에서 수동으로 문서화하기에는 너무 번거로워서 고민인 상황
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+**사용자 시나리오**:
+1. 슬랙 채널에서 진행된 토론 스레드를 통합 관리 페이지로 가져오기
+2. 주제별로 AI가 토론 내용을 분석하여 자동 분류 및 정리
+3. 각 팀원의 의견과 근거를 개별적으로 추출하여 구조화
+4. 토론 과정에서 도출된 최종 결론과 액션 아이템을 자동 식별
+5. 정형화된 회의록 템플릿으로 자동 변환하여 팀 문서로 저장
 
-## How can I deploy this project?
+**사용자 스토리**:
+> "팀 리더로서, 저는 슬랙에서 진행된 비공식적인 토론도 정식 회의와 동일한 수준의 체계적인 문서로 만들고 싶습니다. 그래서 채팅 환경의 번거로움 없이 모든 토의 과정을 효율적으로 기록할 수 있습니다."
 
-Simply open [Lovable](https://lovable.dev/projects/5d19a0e6-8c35-4f5c-8130-cc5517549422) and click on Share -> Publish.
+**인수 조건**:
+- Given: PM이 슬랙 토론 스레드를 선택했을 때
+- When: 토론 내용 문서화를 요청했을 때
+- Then: 토론 주제, 팀원별 의견, 최종 결론이 자동으로 정리된 문서가 생성된다
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+# 핵심 가치 제안
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 1. **분산 협업 환경의 통합 문서화**
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **분산된 협업 도구 연결**: 슬랙, 노션, 지라 등 여러 도구의 활동을 하나로 통합
+- **실시간 자동 문서화**: 채팅, 코드 리뷰, 회의 등 모든 협업 과정을 실시간으로 구조화된 문서로 변환
+- **개발자 친화적 접근**: 별도 문서 작성 없이 작업 시간 기록만으로 완전한 프로젝트 히스토리 생성
+
+## 2. **채팅 기반 토론의 스마트 문서화**
+
+- **비공식 토론 → 공식 문서**: 슬랙 스레드의 자유로운 토론을 정형화된 회의록으로 자동 변환
+- **지능형 내용 분석**: AI 기반 토론 주제 분류, 팀원별 의견 추출, 결론 도출 자동화
+- **즉석 문서 생성**: 채팅 환경에서 벗어나지 않고도 클릭 한 번으로 완성된 문서 확보
+
+## 3. **시간 절약 중심의 협업 최적화**
+
+- **Zero Manual Work**: 수동 문서화, 수동 리마인더, 수동 진행상황 체크 완전 제거
+- **작업 집중도 극대화**: 개발자는 코딩에만, PM은 전략적 업무에만 집중 가능한 환경
+- **자동 성과 추적**: 개별 기여도와 팀 성과가 자동으로 측정되어 투명한 협업 환경 제공
+
+## 4. **프로젝트 생명주기 전반 커버**
+
+- **시작부터 완료까지**: 프로젝트 킥오프부터 포트폴리오 완성까지 끊김없는 지원
+- **학습 기록 자동화**: 개발 과정의 트러블슈팅, 기술적 의사결정 등이 자동으로 학습 문서로 축적
+- **재사용 가능한 지식 베이스**: 과거 프로젝트의 문서화된 경험이 새 프로젝트의 참고 자료로 활용
+
+# **구현 범위**
+
+- 이슈 등록 및 조회 페이지
+- 통합 관리 페이지

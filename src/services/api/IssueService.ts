@@ -1,0 +1,195 @@
+import axiosInstance from '@/lib/axios';
+import { Issue, IssueFilter, IssueStats, ApiResponse, PaginatedResponse } from '@/types';
+import { mockIssues } from '@/fixtures/issues';
+
+class IssueService {
+  private static useFixtures = import.meta.env.VITE_USE_FIXTURES === 'true';
+  private static fixtureDelay = parseInt(import.meta.env.VITE_FIXTURE_DELAY || '1000');
+
+  static async getAll(filters?: IssueFilter): Promise<Issue[]> {
+    if (this.useFixtures) {
+      return this.getMockIssues(filters);
+    }
+
+    try {
+      const response = await axiosInstance.get<ApiResponse<Issue[]>>('/issues', {
+        params: filters
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to fetch issues:', error);
+      return this.getMockIssues(filters);
+    }
+  }
+
+  static async getById(id: string): Promise<Issue | null> {
+    if (this.useFixtures) {
+      await this.delay();
+      return mockIssues.find(issue => issue.id === id) || null;
+    }
+
+    try {
+      const response = await axiosInstance.get<ApiResponse<Issue>>(`/issues/${id}`);
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to fetch issue:', error);
+      return mockIssues.find(issue => issue.id === id) || null;
+    }
+  }
+
+  static async create(issueData: Omit<Issue, 'id' | 'createdAt' | 'updatedAt'>): Promise<Issue> {
+    if (this.useFixtures) {
+      await this.delay();
+      const mockIssue: Issue = {
+        ...issueData,
+        id: Date.now().toString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      return mockIssue;
+    }
+
+    try {
+      const response = await axiosInstance.post<ApiResponse<Issue>>('/issues', issueData);
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to create issue:', error);
+      const mockIssue: Issue = {
+        ...issueData,
+        id: Date.now().toString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      return mockIssue;
+    }
+  }
+
+  static async update(id: string, updates: Partial<Issue>): Promise<Issue> {
+    if (this.useFixtures) {
+      await this.delay();
+      const existingIssue = mockIssues.find(issue => issue.id === id);
+      if (existingIssue) {
+        return { ...existingIssue, ...updates, updatedAt: new Date().toISOString() };
+      }
+      throw new Error('Issue not found');
+    }
+
+    try {
+      const response = await axiosInstance.patch<ApiResponse<Issue>>(`/issues/${id}`, updates);
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to update issue:', error);
+      const existingIssue = mockIssues.find(issue => issue.id === id);
+      if (existingIssue) {
+        return { ...existingIssue, ...updates, updatedAt: new Date().toISOString() };
+      }
+      throw new Error('Issue not found');
+    }
+  }
+
+  static async delete(id: string): Promise<boolean> {
+    if (this.useFixtures) {
+      await this.delay();
+      return true; // 픽스처에서는 항상 성공
+    }
+
+    try {
+      await axiosInstance.delete(`/issues/${id}`);
+      return true;
+    } catch (error) {
+      console.error('Failed to delete issue:', error);
+      return false;
+    }
+  }
+
+  static async getStats(): Promise<IssueStats> {
+    if (this.useFixtures) {
+      await this.delay();
+      return {
+        total: mockIssues.length,
+        todo: mockIssues.filter(i => i.status === 'todo').length,
+        inProgress: mockIssues.filter(i => i.status === 'in-progress').length,
+        review: mockIssues.filter(i => i.status === 'review').length,
+        done: mockIssues.filter(i => i.status === 'done').length,
+        blocked: mockIssues.filter(i => i.status === 'blocked').length,
+      };
+    }
+
+    try {
+      const response = await axiosInstance.get<ApiResponse<IssueStats>>('/issues/stats');
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to fetch issue stats:', error);
+      return {
+        total: mockIssues.length,
+        todo: mockIssues.filter(i => i.status === 'todo').length,
+        inProgress: mockIssues.filter(i => i.status === 'in-progress').length,
+        review: mockIssues.filter(i => i.status === 'review').length,
+        done: mockIssues.filter(i => i.status === 'done').length,
+        blocked: mockIssues.filter(i => i.status === 'blocked').length,
+      };
+    }
+  }
+
+  static async createFromMeeting(meetingId: string): Promise<Issue[]> {
+    if (this.useFixtures) {
+      await this.delay();
+      // 회의에서 추출된 이슈 예시
+      return [
+        {
+          id: Date.now().toString(),
+          title: `회의 ${meetingId}에서 추출된 이슈`,
+          description: '픽스처에서 생성된 이슈입니다.',
+          assignee: '자동할당',
+          priority: 'medium',
+          status: 'todo',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          autoGenerated: true,
+          source: {
+            type: 'manual',
+            reference: `Meeting ${meetingId}`
+          }
+        }
+      ];
+    }
+
+    try {
+      const response = await axiosInstance.post<ApiResponse<Issue[]>>(`/meetings/${meetingId}/extract-issues`);
+      return response.data.data;
+    } catch (error) {
+      console.error('Failed to create issues from meeting:', error);
+      return [];
+    }
+  }
+
+  private static async delay(): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, this.fixtureDelay));
+  }
+
+  private static getMockIssues(filters?: IssueFilter): Issue[] {
+    let filtered = mockIssues;
+
+    if (filters) {
+      if (filters.status && filters.status !== 'all') {
+        filtered = filtered.filter(issue => issue.status === filters.status);
+      }
+      if (filters.assignee && filters.assignee !== 'all') {
+        filtered = filtered.filter(issue => issue.assignee === filters.assignee);
+      }
+      if (filters.priority && filters.priority !== 'all') {
+        filtered = filtered.filter(issue => issue.priority === filters.priority);
+      }
+      if (filters.search) {
+        filtered = filtered.filter(issue => 
+          issue.title.toLowerCase().includes(filters.search!.toLowerCase()) ||
+          issue.description.toLowerCase().includes(filters.search!.toLowerCase())
+        );
+      }
+    }
+
+    return filtered;
+  }
+}
+
+export default IssueService;

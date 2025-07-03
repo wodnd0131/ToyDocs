@@ -131,6 +131,11 @@ export default {
 					'50%': {
 						boxShadow: '0 0 0 10px rgba(49, 130, 246, 0)'
 					}
+				},
+				'issue-register-fade': {
+					'0%': { backgroundColor: '#161b22', opacity: '1' },
+					'20%': { backgroundColor: '#FFECB3', opacity: '1' },
+					'100%': { backgroundColor: '#FFECB3', opacity: '0', height: '0px', padding: '0px' }
 				}
 			},
 			animation: {
@@ -139,7 +144,8 @@ export default {
 				'fade-in': 'fade-in 0.6s ease-out',
 				'slide-in-left': 'slide-in-left 0.5s ease-out',
 				'type-writer': 'type-writer 2s steps(20) infinite',
-				'pulse-blue': 'pulse-blue 2s infinite'
+				'pulse-blue': 'pulse-blue 2s infinite',
+				'issue-register-fade': 'issue-register-fade 3.5s forwards'
 			},
 			backgroundImage: {
 				'gradient-toss': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',

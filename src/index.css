@@ -90,9 +90,22 @@
     @apply border-border;
   }
 
+  html {
+    @apply dark;
+    background-color: #0d1117 !important;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-github-dark text-white min-h-screen;
+    background-color: #0d1117 !important;
     font-feature-settings: "rlig" 1, "calt" 1;
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+    @apply bg-github-dark min-h-screen;
+    background-color: #0d1117 !important;
   }
 }
 
