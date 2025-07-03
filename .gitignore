@@ -15,7 +15,7 @@ dist-ssr
 .env
 .env.*
 package-lock.json
-.cluade
+.claude
 
 GEMINI.md
 
